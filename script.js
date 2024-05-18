@@ -175,28 +175,37 @@ function goFight() {
   monsterName.innerText = monsters[fighting].name;
   monsterHealthText.innerText = monsterHealth;
 }
-function attack(){
+function attack() {
   text.innerText = "The " + monsters[fighting].name + " attacks.";
   text.innerText += " You attack it with your " + weapons[currentWeapon].name + ".";
   health -= getMonsterAttackValue(monsters[fighting].level);
-  monsterHealth -= weapons[currentWeapon].power;
-  monsterHealth -= weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;
+  if (isMonsterHit()) {
+    monsterHealth -= weapons[currentWeapon].power + Math.floor(Math.random() * xp) + 1;    
+  } else {
+    text.innerText += " You miss."
+  }
   healthText.innerText = health;
   monsterHealthText.innerText = monsterHealth;
-  if ( health <= 0){
-    return lose();
-  }else if (monsterHealth <= 0){
-    if (fighting === 2){
-      winGame()
-    } else  {
-    defeatMonster();
+  if (health <= 0) {
+    lose();
+  } else if (monsterHealth <= 0) {
+    if (fighting === 2) {
+      winGame();
+    } else {
+      defeatMonster();
     }
+  }
+  if (Math.random() <= .1 && inventory.length !== 1) {
+     text.innerText += " Your " + inventory.pop() + " breaks."
+     currentWeapon--;
   }
 }
 function getMonsterAttackValue(level){
   const hit = (level * 5) - (Math.floor(Math.random() * xp));
 }
-
+function isMonsterHit(){
+  return Math.random() > .2 || health < 20;
+}
 function dodge(){
   text.innerText  = "You dodge the attack from the " + monsters[fighting].name;
   console.log(hit);
@@ -226,4 +235,10 @@ function restart(){
   healthText.innerText = health;
   xpText.innerText = xp;
   goTown();
+}
+function easterEgg (){
+  update(locations[7])
+}
+function pick (guess) {
+
 }
